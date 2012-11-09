@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nancy.LightningCache", "Nancy.LightningCache\Nancy.LightningCache.csproj", "{FDE0905B-F713-478C-83BC-9872631758FE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Asp.Net.Example", "Asp.Net.Example\Asp.Net.Example.csproj", "{9B3CABB5-4AD2-4AA0-8B41-E293CCD9563E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FDE0905B-F713-478C-83BC-9872631758FE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FDE0905B-F713-478C-83BC-9872631758FE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FDE0905B-F713-478C-83BC-9872631758FE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FDE0905B-F713-478C-83BC-9872631758FE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9B3CABB5-4AD2-4AA0-8B41-E293CCD9563E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9B3CABB5-4AD2-4AA0-8B41-E293CCD9563E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9B3CABB5-4AD2-4AA0-8B41-E293CCD9563E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9B3CABB5-4AD2-4AA0-8B41-E293CCD9563E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

@@ -2,5 +2,11 @@
 bin
 obj
 
+#resharper
+_ReSharper.Nancy.LightningCache
+
+#other
+Nancy.LightningCache.v11.suo
+
 # mstest test results
 TestResults
