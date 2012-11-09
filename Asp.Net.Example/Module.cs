@@ -21,7 +21,5 @@ namespace Asp.Net.Example
                 ").AsCacheable(DateTime.Now.AddSeconds(1));
             };
         }
-
-
     }
 }
