@@ -159,9 +159,15 @@ namespace Nancy.LightningCache
 
                     request.Query[NO_REQUEST_CACHE_KEY] = NO_REQUEST_CACHE_KEY;
 
-                    _nancyEngine.HandleRequest(request);
+                    var context2 = _nancyEngine.HandleRequest(request);
+
+                    if(context2.Response.StatusCode != HttpStatusCode.OK)
+                        _cacheStore.Set(key, null, DateTime.Now);
                 }
-                catch (Exception){}
+                catch (Exception)
+                {
+                    _cacheStore.Set(key, null, DateTime.Now);
+                }
                 finally
                 {
                     RequestSyncKeys.Remove(key);
