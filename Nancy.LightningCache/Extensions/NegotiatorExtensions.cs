@@ -14,8 +14,7 @@ namespace Nancy.LightningCache.Extensions
         /// <returns></returns>
         public static Negotiator AsCacheable(this Negotiator negotiator, DateTime expiration)
         {
-            negotiator.WithHeader("nancy-lightningcache", expiration.ToString(CultureInfo.InvariantCulture));
-            return negotiator;
+            return negotiator.WithHeader("nancy-lightningcache", expiration.ToString(CultureInfo.InvariantCulture));
         }
     }
 }
