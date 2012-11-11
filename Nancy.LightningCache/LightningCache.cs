@@ -122,11 +122,21 @@ namespace Nancy.LightningCache
             if (context.Response is CacheableResponse)
             {
                 var key = GetCacheKey(context.Request);
+                if(context.Response.StatusCode != HttpStatusCode.OK)
+                {
+                    _cacheStore.Remove(key);
+                    return;
+                }
                 _cacheStore.Set(key, context, (context.Response as CacheableResponse).Expiration);
             }
             else if (context.NegotiationContext != null && context.NegotiationContext.Headers != null && context.NegotiationContext.Headers.ContainsKey("nancy-lightningcache"))
             {
                 var key = GetCacheKey(context.Request);
+                if (context.Response.StatusCode != HttpStatusCode.OK)
+                {
+                    _cacheStore.Remove(key);
+                    return;
+                }
                 var expiration = DateTime.Parse(context.NegotiationContext.Headers["nancy-lightningcache"]);
                 context.NegotiationContext.Headers.Remove("nancy-lightningcache");
                 _cacheStore.Set(key, context, expiration);
@@ -166,7 +176,7 @@ namespace Nancy.LightningCache
                 }
                 catch (Exception)
                 {
-                    _cacheStore.Set(key, null, DateTime.Now);
+                    _cacheStore.Remove(key);
                 }
                 finally
                 {

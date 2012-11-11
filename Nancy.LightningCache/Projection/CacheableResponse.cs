@@ -5,13 +5,13 @@ namespace Nancy.LightningCache.Projection
     /// <summary>
     /// Cacheable Nancy Response
     /// </summary>
-    public class CacheableResponse : Nancy.Response
+    public class CacheableResponse : Response
     {
-        private readonly Nancy.Response _response;
+        private readonly Response _response;
 
         public readonly DateTime Expiration;
 
-        public CacheableResponse(Nancy.Response response, DateTime expiration)
+        public CacheableResponse(Response response, DateTime expiration)
         {
             _response = response;
             Expiration = expiration;

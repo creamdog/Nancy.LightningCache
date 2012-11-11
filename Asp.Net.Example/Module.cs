@@ -20,6 +20,17 @@ namespace Asp.Net.Example
                 this is a cached response: "+DateTime.Now.ToString(CultureInfo.InvariantCulture)+@"
                 ").AsCacheable(DateTime.Now.AddSeconds(1));
             };
+
+
+            Get["/faultyResponse"] = _ =>
+            {
+                return new Response() {StatusCode = HttpStatusCode.InternalServerError}.AsCacheable(DateTime.Now.AddSeconds(30));
+            };
+
+            Get["/faultyConditionalResponse"] = _ =>
+            {
+                return new Response() { StatusCode = (string)Request.Query.fault.Value == "true" ? HttpStatusCode.InternalServerError : HttpStatusCode.OK }.AsCacheable(DateTime.Now.AddSeconds(1));
+            };
         }
     }
 }

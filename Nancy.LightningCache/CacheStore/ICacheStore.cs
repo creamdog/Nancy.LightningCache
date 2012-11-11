@@ -10,5 +10,6 @@ namespace Nancy.LightningCache.CacheStore
     {
         CachedResponse Get(string key);
         void Set(string key, NancyContext context, DateTime absoluteExpiration);
+        void Remove(string key);
     }
 }

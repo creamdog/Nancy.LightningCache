@@ -127,6 +127,22 @@ namespace Nancy.LightningCache.CacheStore
         /// 
         /// </summary>
         /// <param name="key"></param>
+        public void Remove(string key)
+        {
+            lock(_lock)
+            {
+                var fileName = Hash(key);
+                if(File.Exists(Path.Combine(_cacheDirectory, fileName)))
+                    File.Delete(Path.Combine(_cacheDirectory, fileName));
+                if (FileKeyExpirationRecord.ContainsKey(fileName))
+                    FileKeyExpirationRecord.Remove(fileName);
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="key"></param>
         /// <param name="context"></param>
         /// <param name="absoluteExpiration"></param>
         public void Set(string key, NancyContext context, DateTime absoluteExpiration)
