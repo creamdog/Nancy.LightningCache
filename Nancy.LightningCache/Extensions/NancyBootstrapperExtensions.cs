@@ -17,7 +17,7 @@ namespace Nancy.LightningCache.Extensions
         /// <param name="varyParams"></param>
         public static void EnableLightningCache(this INancyBootstrapper bootstrapper, IRouteResolver routeResolver, IPipelines pipelines, IEnumerable<string> varyParams)
         {
-            LightningCache.Enable(bootstrapper.GetEngine(), routeResolver, pipelines, varyParams);
+            LightningCache.Enable(bootstrapper, routeResolver, pipelines, varyParams);
         }
 
         /// <summary>
@@ -30,7 +30,7 @@ namespace Nancy.LightningCache.Extensions
         /// <param name="cacheStore"> </param>
         public static void EnableLightningCache(this INancyBootstrapper bootstrapper, IRouteResolver routeResolver, IPipelines pipelines, IEnumerable<string> varyParams, ICacheStore cacheStore)
         {
-            LightningCache.Enable(bootstrapper.GetEngine(), routeResolver, pipelines, varyParams, cacheStore);
+            LightningCache.Enable(bootstrapper, routeResolver, pipelines, varyParams, cacheStore);
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading;
 using Nancy.Bootstrapper;
@@ -18,28 +19,35 @@ namespace Nancy.LightningCache
 
         private static string[] _varyParams = new string[0];
         private static ICacheStore _cacheStore;
-        private static INancyEngine _nancyEngine;
+        
         private static bool _enabled;
+
+        private static INancyEngine NancyEngine
+        {
+            get { return _nancyBootstrapper.GetEngine(); }
+        }
         private static IRouteResolver _routeResolver;
+
+        private static INancyBootstrapper _nancyBootstrapper;
 
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="nancyEngine"></param>
-        /// <param name="routeResolver"> </param>
-        /// <param name="pipeline"></param>
+        /// <param name="nancyBootstrapper"></param>
+        /// <param name="routeResolver"></param>
+        /// <param name="pipelines"></param>
         /// <param name="varyParams"></param>
-        public static void Enable(INancyEngine nancyEngine, IRouteResolver routeResolver, IPipelines pipeline, IEnumerable<string> varyParams)
+        public static void Enable(INancyBootstrapper nancyBootstrapper, IRouteResolver routeResolver, IPipelines pipelines, IEnumerable<string> varyParams)
         {
             if (_enabled)
                 return;
             _enabled = true;
             _varyParams = varyParams.ToArray();
             _cacheStore = new WebCacheStore();
-            _nancyEngine = nancyEngine;
+            _nancyBootstrapper = nancyBootstrapper;
             _routeResolver = routeResolver;
-            pipeline.BeforeRequest.AddItemToStartOfPipeline(CheckCache);
-            pipeline.AfterRequest.AddItemToEndOfPipeline(SetCache);
+            pipelines.BeforeRequest.AddItemToStartOfPipeline(CheckCache);
+            pipelines.AfterRequest.AddItemToEndOfPipeline(SetCache);
             
         }
 
@@ -47,19 +55,19 @@ namespace Nancy.LightningCache
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="nancyEngine"></param>
-        /// <param name="routeResolver"> </param>
+        /// <param name="nancyBootstrapper"></param>
+        /// <param name="routeResolver"></param>
         /// <param name="pipeline"></param>
         /// <param name="varyParams"></param>
-        /// <param name="cacheStore"> </param>
-        public static void Enable(INancyEngine nancyEngine, IRouteResolver routeResolver, IPipelines pipeline, IEnumerable<string> varyParams, ICacheStore cacheStore)
+        /// <param name="cacheStore"></param>
+        public static void Enable(INancyBootstrapper nancyBootstrapper, IRouteResolver routeResolver, IPipelines pipeline, IEnumerable<string> varyParams, ICacheStore cacheStore)
         {
             if (_enabled)
                 return;
             _enabled = true;
             _varyParams = varyParams.ToArray();
             _cacheStore = cacheStore;
-            _nancyEngine = nancyEngine;
+            _nancyBootstrapper = nancyBootstrapper;
             _routeResolver = routeResolver;
             pipeline.BeforeRequest.AddItemToStartOfPipeline(CheckCache);
             pipeline.AfterRequest.AddItemToEndOfPipeline(SetCache);
@@ -169,7 +177,7 @@ namespace Nancy.LightningCache
 
                     request.Query[NO_REQUEST_CACHE_KEY] = NO_REQUEST_CACHE_KEY;
 
-                    var context2 = _nancyEngine.HandleRequest(request);
+                    var context2 = NancyEngine.HandleRequest(request);
 
                     if(context2.Response.StatusCode != HttpStatusCode.OK)
                         _cacheStore.Set(key, null, DateTime.Now);
