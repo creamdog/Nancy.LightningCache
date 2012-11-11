@@ -13,11 +13,11 @@ the following example is using the default "System.Web.Cache" CacheStore
     {
         public class ApplicationBootrapper : Nancy.DefaultNancyBootstrapper
         {
-            protected override void RequestStartup(Nancy.TinyIoc.TinyIoCContainer container, Nancy.Bootstrapper.IPipelines pipelines, Nancy.NancyContext context)
+            protected override void ApplicationStartup(Nancy.TinyIoc.TinyIoCContainer container, Nancy.Bootstrapper.IPipelines pipelines)
             {
+                base.ApplicationStartup(container, pipelines);
                 /*enable lightningcache, vary by url params id,query,take and skip*/
-                this.EnableLightningCache(container.Resolve<IRouteResolver>(), ApplicationPipelines, new []{"id","query","take","skip"});
-                base.RequestStartup(container, pipelines, context);
+                this.EnableLightningCache(container.Resolve<IRouteResolver>(), ApplicationPipelines, new[] { "id", "query", "take", "skip" });
             }
         }
     }
@@ -60,12 +60,11 @@ If your application does not have access to "System.Web.Cache" as in running in 
     {
         public class ApplicationBootrapper : Nancy.DefaultNancyBootstrapper
         {
-            protected override void RequestStartup(Nancy.TinyIoc.TinyIoCContainer container, Nancy.Bootstrapper.IPipelines pipelines, Nancy.NancyContext context)
+            protected override void ApplicationStartup(Nancy.TinyIoc.TinyIoCContainer container, Nancy.Bootstrapper.IPipelines pipelines)
             {
+                base.ApplicationStartup(container, pipelines);
                 /*enable lightningcache using the DiskCacheStore, vary by url params id,query,take and skip*/
                 this.EnableLightningCache(container.Resolve<IRouteResolver>(), ApplicationPipelines, new[] { "id", "query", "take", "skip" }, new DiskCacheStore("c:/tmp/cache"));
-    
-                base.RequestStartup(container, pipelines, context);
             }
         }
     }
