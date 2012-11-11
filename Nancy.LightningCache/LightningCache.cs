@@ -51,14 +51,14 @@ namespace Nancy.LightningCache
         /// <param name="routeResolver"> </param>
         /// <param name="pipeline"></param>
         /// <param name="varyParams"></param>
-        /// <param name="cacheProviderType"></param>
-        public static void Enable(INancyEngine nancyEngine, IRouteResolver routeResolver, IPipelines pipeline, IEnumerable<string> varyParams, Type cacheProviderType)
+        /// <param name="cacheStore"> </param>
+        public static void Enable(INancyEngine nancyEngine, IRouteResolver routeResolver, IPipelines pipeline, IEnumerable<string> varyParams, ICacheStore cacheStore)
         {
             if (_enabled)
                 return;
             _enabled = true;
             _varyParams = varyParams.ToArray();
-            _cacheStore = Activator.CreateInstance(cacheProviderType) as ICacheStore;
+            _cacheStore = cacheStore;
             _nancyEngine = nancyEngine;
             _routeResolver = routeResolver;
             pipeline.BeforeRequest.AddItemToStartOfPipeline(CheckCache);

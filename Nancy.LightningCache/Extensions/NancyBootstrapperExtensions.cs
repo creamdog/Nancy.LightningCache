@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Nancy.Bootstrapper;
+using Nancy.LightningCache.CacheStore;
 using Nancy.Routing;
 
 namespace Nancy.LightningCache.Extensions
@@ -26,10 +27,10 @@ namespace Nancy.LightningCache.Extensions
         /// <param name="routeResolver"> </param>
         /// <param name="pipelines"></param>
         /// <param name="varyParams"></param>
-        /// <param name="cacheProviderType"></param>
-        public static void EnableLightningCache(this INancyBootstrapper bootstrapper, IRouteResolver routeResolver, IPipelines pipelines, IEnumerable<string> varyParams, Type cacheProviderType)
+        /// <param name="cacheStore"> </param>
+        public static void EnableLightningCache(this INancyBootstrapper bootstrapper, IRouteResolver routeResolver, IPipelines pipelines, IEnumerable<string> varyParams, ICacheStore cacheStore)
         {
-            LightningCache.Enable(bootstrapper.GetEngine(), routeResolver, pipelines, varyParams, cacheProviderType);
+            LightningCache.Enable(bootstrapper.GetEngine(), routeResolver, pipelines, varyParams, cacheStore);
         }
     }
 }
