@@ -47,3 +47,25 @@ the following example is using the default "System.Web.Cache" CacheStore
             }
         }
     }
+
+
+##Example usage of the DiskCacheStore
+If your application does not have access to "System.Web.Cache" as in running in self hosting mode you can use the DiskCacheStore to enable caching thought LightningCache.
+
+    using Nancy.LightningCache.CacheStore;
+    using Nancy.LightningCache.Extensions;
+    using Nancy.Routing;
+    
+    namespace Asp.Net.Example
+    {
+        public class ApplicationBootrapper : Nancy.DefaultNancyBootstrapper
+        {
+            protected override void RequestStartup(Nancy.TinyIoc.TinyIoCContainer container, Nancy.Bootstrapper.IPipelines pipelines, Nancy.NancyContext context)
+            {
+                /*enable lightningcache using the DiskCacheStore, vary by url params id,query,take and skip*/
+                this.EnableLightningCache(container.Resolve<IRouteResolver>(), ApplicationPipelines, new[] { "id", "query", "take", "skip" }, new DiskCacheStore("c:/tmp/cache"));
+    
+                base.RequestStartup(container, pipelines, context);
+            }
+        }
+    }
