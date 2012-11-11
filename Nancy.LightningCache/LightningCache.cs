@@ -22,9 +22,14 @@ namespace Nancy.LightningCache
         
         private static bool _enabled;
 
+        private static INancyEngine _nancyEngine;
         private static INancyEngine NancyEngine
         {
-            get { return _nancyBootstrapper.GetEngine(); }
+            get
+            {
+                _nancyEngine = _nancyEngine ?? _nancyBootstrapper.GetEngine();
+                return _nancyEngine;
+            }
         }
         private static IRouteResolver _routeResolver;
 
@@ -180,7 +185,7 @@ namespace Nancy.LightningCache
                     var context2 = NancyEngine.HandleRequest(request);
 
                     if(context2.Response.StatusCode != HttpStatusCode.OK)
-                        _cacheStore.Set(key, null, DateTime.Now);
+                        _cacheStore.Remove(key);
                 }
                 catch (Exception)
                 {
