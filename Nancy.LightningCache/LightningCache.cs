@@ -47,7 +47,7 @@ namespace Nancy.LightningCache
             if (_enabled)
                 return;
             _enabled = true;
-            _varyParams = varyParams.ToArray();
+            _varyParams = varyParams.Select(key => key.ToLower().Trim()).ToArray();
             _cacheStore = new WebCacheStore();
             _nancyBootstrapper = nancyBootstrapper;
             _routeResolver = routeResolver;
@@ -70,7 +70,7 @@ namespace Nancy.LightningCache
             if (_enabled)
                 return;
             _enabled = true;
-            _varyParams = varyParams.ToArray();
+            _varyParams = varyParams.Select(key => key.ToLower().Trim()).ToArray();
             _cacheStore = cacheStore;
             _nancyBootstrapper = nancyBootstrapper;
             _routeResolver = routeResolver;
