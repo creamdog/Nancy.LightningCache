@@ -104,6 +104,9 @@ namespace Nancy.LightningCache
 
             var key = GetCacheKey(context.Request);
 
+            if (string.IsNullOrEmpty(key))
+                return null;
+
             var response = _cacheStore.Get(key);
             
             if (response == null)
@@ -132,9 +135,13 @@ namespace Nancy.LightningCache
             if (context.Response is CachedResponse)
                 return;
 
+            var key = GetCacheKey(context.Request);
+
+            if (string.IsNullOrEmpty(key))
+                return;
+
             if (context.Response is CacheableResponse)
             {
-                var key = GetCacheKey(context.Request);
                 if(context.Response.StatusCode != HttpStatusCode.OK)
                 {
                     _cacheStore.Remove(key);
@@ -144,7 +151,6 @@ namespace Nancy.LightningCache
             }
             else if (context.NegotiationContext != null && context.NegotiationContext.Headers != null && context.NegotiationContext.Headers.ContainsKey("nancy-lightningcache"))
             {
-                var key = GetCacheKey(context.Request);
                 if (context.Response.StatusCode != HttpStatusCode.OK)
                 {
                     _cacheStore.Remove(key);
@@ -172,6 +178,9 @@ namespace Nancy.LightningCache
                     return;
 
                 var key = GetCacheKey(request);
+
+                if(string.IsNullOrEmpty(key))
+                    return;
 
                 try
                 {
@@ -206,7 +215,15 @@ namespace Nancy.LightningCache
         /// <returns></returns>
         private static string GetCacheKey(Request request)
         {
-            var ub = new UriBuilder(request.Url);
+            UriBuilder ub;
+            try
+            {
+                ub = new UriBuilder(request.Url);
+            }
+            catch (Exception ex)
+            {
+                return string.Empty;
+            }
 
             var query = new Dictionary<string, string>();
 
