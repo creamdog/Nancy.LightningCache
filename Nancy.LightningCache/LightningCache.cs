@@ -215,15 +215,8 @@ namespace Nancy.LightningCache
         /// <returns></returns>
         private static string GetCacheKey(Request request)
         {
-            UriBuilder ub;
-            try
-            {
-                ub = new UriBuilder(request.Url);
-            }
-            catch (Exception ex)
-            {
+            if (request == null || request.Url == null)
                 return string.Empty;
-            }
 
             var query = new Dictionary<string, string>();
 
@@ -249,9 +242,18 @@ namespace Nancy.LightningCache
             foreach (var removeParamKey in removeParamKeys)
                 query.Remove(removeParamKey);
 
-            ub.Query = string.Join("&", query.Select(a => string.Join("=", a.Key, a.Value)));
+            var url = new Url
+            {
+                BasePath = request.Url.BasePath,
+                Fragment = request.Url.Fragment,
+                HostName = request.Url.HostName,
+                Path = request.Url.Path,
+                Port = request.Url.Port,
+                Query = (query.Count > 0 ? "?" : string.Empty) + string.Join("&", query.Select(a => string.Join("=", a.Key, a.Value))),
+                Scheme = request.Url.Scheme,
+            };
 
-            return ub.Uri.ToString();
+            return url.ToString();
         }
     }
 }
