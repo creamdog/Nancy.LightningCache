@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>Nancy.LightningCache</id>
+    <version>$version$</version>
+    <authors>Christian Westman</authors>
+    <owners>Christian Westman</owners>
+    <projectUrl>https://github.com/creamdog/Nancy.LightningCache</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>delivers dynamic content with the speed of static content using asyncronous caching</description>
+    <releaseNotes>initial release</releaseNotes>
+    <copyright>Copyright 2012</copyright>
+    <tags>nancy cache</tags>
+    <dependencies>
+      <dependency id="Nancy" version="0.13.0" />
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="bin\Release\Nancy.LightningCache.dll" target="lib\net40"/>
+  </files>
+</package>
