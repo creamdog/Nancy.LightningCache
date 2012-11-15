@@ -3,6 +3,16 @@ Nancy.LightningCache
 
 Delivers dynamic content with the speed of static content using asyncronous caching. Nancy.LightningCache will allways deliver cached responses if they exist and update asynchronously if needed.
 
+##Installation
+
+Install via nuget https://nuget.org/packages/Nancy.LightningCache
+
+```
+PM> Install-Package Nancy.LightningCache
+```
+
+Or build from source and drop Nancy.LightningCache.dll into your solution
+
 ##Example usage
 the following example is using the default "System.Web.Cache" CacheStore
 ###1. Add to your bootstrapper
