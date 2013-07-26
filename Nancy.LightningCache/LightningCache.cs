@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Globalization;
 using System.Linq;
 using System.Threading;
 using Nancy.Bootstrapper;
@@ -156,7 +157,7 @@ namespace Nancy.LightningCache
                     _cacheStore.Remove(key);
                     return;
                 }
-                var expiration = DateTime.Parse(context.NegotiationContext.Headers["nancy-lightningcache"]);
+                var expiration = DateTime.Parse(context.NegotiationContext.Headers["nancy-lightningcache"], CultureInfo.InvariantCulture);
                 context.NegotiationContext.Headers.Remove("nancy-lightningcache");
                 _cacheStore.Set(key, context, expiration);
             }
