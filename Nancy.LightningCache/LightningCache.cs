@@ -20,7 +20,7 @@ namespace Nancy.LightningCache
 
         private static string[] _varyParams = new string[0];
         private static ICacheStore _cacheStore;
-        
+
         private static bool _enabled;
 
         private static INancyEngine _nancyEngine;
@@ -54,7 +54,7 @@ namespace Nancy.LightningCache
             _routeResolver = routeResolver;
             pipelines.BeforeRequest.AddItemToStartOfPipeline(CheckCache);
             pipelines.AfterRequest.AddItemToEndOfPipeline(SetCache);
-            
+
         }
 
 
@@ -89,7 +89,9 @@ namespace Nancy.LightningCache
         {
             var resolution = _routeResolver.Resolve(context);
             var preRequirements = resolution.Before;
-            return preRequirements.Invoke(context);
+            var task = preRequirements.Invoke(context, new CancellationToken(false));
+            task.Wait();
+            return context.Response;
         }
 
         /// <summary>
@@ -109,11 +111,11 @@ namespace Nancy.LightningCache
                 return null;
 
             var response = _cacheStore.Get(key);
-            
+
             if (response == null)
                 return null;
 
-            if(response.Expiration < DateTime.Now)
+            if (response.Expiration < DateTime.Now)
             {
                 var t = new Thread(HandleRequestAsync);
                 t.Start(context.Request);
@@ -143,7 +145,7 @@ namespace Nancy.LightningCache
 
             if (context.Response is CacheableResponse)
             {
-                if(context.Response.StatusCode != HttpStatusCode.OK)
+                if (context.Response.StatusCode != HttpStatusCode.OK)
                 {
                     _cacheStore.Remove(key);
                     return;
@@ -171,7 +173,7 @@ namespace Nancy.LightningCache
         /// <param name="context"></param>
         private static void HandleRequestAsync(object context)
         {
-            lock(Lock)
+            lock (Lock)
             {
                 var request = context as Request;
 
@@ -180,7 +182,7 @@ namespace Nancy.LightningCache
 
                 var key = GetCacheKey(request);
 
-                if(string.IsNullOrEmpty(key))
+                if (string.IsNullOrEmpty(key))
                     return;
 
                 try
@@ -194,7 +196,7 @@ namespace Nancy.LightningCache
 
                     var context2 = NancyEngine.HandleRequest(request);
 
-                    if(context2.Response.StatusCode != HttpStatusCode.OK)
+                    if (context2.Response.StatusCode != HttpStatusCode.OK)
                         _cacheStore.Remove(key);
                 }
                 catch (Exception)

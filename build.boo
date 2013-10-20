@@ -1,6 +1,6 @@
 solution_file = "Nancy.LightningCache.sln"
 configuration = "release"
-nextVersion = "0.1.1"
+nextVersion = "0.1.2"
 
 target default, (updateVersion, compile, nuget):
 	pass
