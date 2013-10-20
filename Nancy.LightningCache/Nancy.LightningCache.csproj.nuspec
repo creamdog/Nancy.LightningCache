@@ -8,7 +8,7 @@
     <projectUrl>https://github.com/creamdog/Nancy.LightningCache</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>delivers dynamic content with the speed of static content using asyncronous caching</description>
-    <releaseNotes>updated to target Nancy 0.20.0</releaseNotes>
+    <releaseNotes>updated to target Nancy 0.20.0. culture invariant datetime parsing.</releaseNotes>
     <copyright>Copyright 2013</copyright>
     <tags>nancy cache</tags>
     <dependencies>
