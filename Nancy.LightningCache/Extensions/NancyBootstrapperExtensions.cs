@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Nancy.Bootstrapper;
+using Nancy.LightningCache.CacheKey;
 using Nancy.LightningCache.CacheStore;
 using Nancy.Routing;
 
@@ -14,10 +15,10 @@ namespace Nancy.LightningCache.Extensions
         /// <param name="bootstrapper"></param>
         /// <param name="routeResolver"> </param>
         /// <param name="pipelines"></param>
-        /// <param name="varyParams"></param>
-        public static void EnableLightningCache(this INancyBootstrapper bootstrapper, IRouteResolver routeResolver, IPipelines pipelines, IEnumerable<string> varyParams)
+        /// <param name="cacheKeyGenerator"></param>
+        public static void EnableLightningCache(this INancyBootstrapper bootstrapper, IRouteResolver routeResolver, IPipelines pipelines, ICacheKeyGenerator cacheKeyGenerator)
         {
-            LightningCache.Enable(bootstrapper, routeResolver, pipelines, varyParams);
+            LightningCache.Enable(bootstrapper, routeResolver, pipelines, cacheKeyGenerator);
         }
 
         /// <summary>
@@ -26,11 +27,11 @@ namespace Nancy.LightningCache.Extensions
         /// <param name="bootstrapper"></param>
         /// <param name="routeResolver"> </param>
         /// <param name="pipelines"></param>
-        /// <param name="varyParams"></param>
+        /// <param name="cacheKeyGenerator"></param>
         /// <param name="cacheStore"> </param>
-        public static void EnableLightningCache(this INancyBootstrapper bootstrapper, IRouteResolver routeResolver, IPipelines pipelines, IEnumerable<string> varyParams, ICacheStore cacheStore)
+        public static void EnableLightningCache(this INancyBootstrapper bootstrapper, IRouteResolver routeResolver, IPipelines pipelines, ICacheKeyGenerator cacheKeyGenerator, ICacheStore cacheStore)
         {
-            LightningCache.Enable(bootstrapper, routeResolver, pipelines, varyParams, cacheStore);
+            LightningCache.Enable(bootstrapper, routeResolver, pipelines, cacheKeyGenerator, cacheStore);
         }
     }
 }

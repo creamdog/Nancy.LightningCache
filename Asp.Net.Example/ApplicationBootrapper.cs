@@ -1,4 +1,5 @@
-﻿using Nancy.LightningCache.CacheStore;
+﻿using Nancy.LightningCache.CacheKey;
+using Nancy.LightningCache.CacheStore;
 using Nancy.LightningCache.Extensions;
 using Nancy.Routing;
 
@@ -11,10 +12,9 @@ namespace Asp.Net.Example
             base.ApplicationStartup(container, pipelines);
 
             /*enable lightningcache, vary by url params id,query,take and skip*/
-            this.EnableLightningCache(container.Resolve<IRouteResolver>(), ApplicationPipelines, new[] { "id", "query", "take", "skip" });
-
+            this.EnableLightningCache(container.Resolve<IRouteResolver>(), ApplicationPipelines, new DefaultCacheKeyGenerator(new[] { "id", "query", "take", "skip" }));
             /*enable lightningcache using the DiskCacheStore, vary by url params id,query,take and skip*/
-            //this.EnableLightningCache(container.Resolve<IRouteResolver>(), ApplicationPipelines, new[] { "id", "query", "take", "skip" }, new DiskCacheStore("c:/tmp/cache"));
+            //this.EnableLightningCache(container.Resolve<IRouteResolver>(), ApplicationPipelines, new DefaultCacheKeyGenerator(new[] { "id", "query", "take", "skip" }), new DiskCacheStore("c:/tmp/cache"));
         }
     }
 }
