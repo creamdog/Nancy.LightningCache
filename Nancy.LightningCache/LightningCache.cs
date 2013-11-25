@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Globalization;
-using System.Linq;
 using System.Threading;
 using Nancy.Bootstrapper;
 using Nancy.LightningCache.CacheKey;
@@ -19,7 +17,6 @@ namespace Nancy.LightningCache
     {
         private static readonly string NO_REQUEST_CACHE_KEY = "_lightningCacheDisabled";
 
-        private static string[] _varyParams = new string[0];
         private static ICacheStore _cacheStore;
         private static ICacheKeyGenerator _cacheKeyGenerator;
 
@@ -38,6 +35,19 @@ namespace Nancy.LightningCache
 
         private static INancyBootstrapper _nancyBootstrapper;
 
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="nancyBootstrapper"></param>
+        /// <param name="routeResolver"></param>
+        /// <param name="pipelines"></param>
+        /// <param name="varyParams"> </param>
+        public static void Enable(INancyBootstrapper nancyBootstrapper, IRouteResolver routeResolver, IPipelines pipelines, string[] varyParams)
+        {
+            Enable(nancyBootstrapper, routeResolver, pipelines, new DefaultCacheKeyGenerator(varyParams), new WebCacheStore());
+        }
+
         /// <summary>
         /// 
         /// </summary>
@@ -47,16 +57,9 @@ namespace Nancy.LightningCache
         /// <param name="cacheKeyGenerator"></param>
         public static void Enable(INancyBootstrapper nancyBootstrapper, IRouteResolver routeResolver, IPipelines pipelines, ICacheKeyGenerator cacheKeyGenerator)
         {
-            if (_enabled)
-                return;
-            _enabled = true;
-            _cacheKeyGenerator = cacheKeyGenerator;
-            _cacheStore = new WebCacheStore();
-            _nancyBootstrapper = nancyBootstrapper;
-            _routeResolver = routeResolver;
-            pipelines.BeforeRequest.AddItemToStartOfPipeline(CheckCache);
-            pipelines.AfterRequest.AddItemToEndOfPipeline(SetCache);
+            Enable(nancyBootstrapper, routeResolver, pipelines, cacheKeyGenerator, new WebCacheStore());
         }
+
 
 
         /// <summary>
