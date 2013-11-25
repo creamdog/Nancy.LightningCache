@@ -83,3 +83,37 @@ namespace Asp.Net.Example
     }
 }
 ```
+
+##Example definining your own cache key generation using ICacheKeyGenerator
+If your application does not have access to "System.Web.Cache" as in running in self hosting mode you can use the DiskCacheStore to enable caching thought LightningCache.
+```c#
+using System;
+using System.Text;
+using Nancy;
+using Nancy.LightningCache.Extensions;
+using Nancy.Routing;
+
+namespace WebApplication
+{
+    public class Bootstrapper : Nancy.DefaultNancyBootstrapper
+    {
+        protected override void ApplicationStartup(Nancy.TinyIoc.TinyIoCContainer container, Nancy.Bootstrapper.IPipelines pipelines)
+        {
+            base.ApplicationStartup(container, pipelines);
+            this.EnableLightningCache(container.Resolve<IRouteResolver>(), ApplicationPipelines, new UrlHashKeyGenerator());
+        }
+
+        public class UrlHashKeyGenerator : Nancy.LightningCache.CacheKey.ICacheKeyGenerator
+        {
+            public string Get(Request request)
+            {
+               using(var md5 = new System.Security.Cryptography.MD5CryptoServiceProvider())
+               {
+                   var hash = md5.ComputeHash(Encoding.UTF8.GetBytes(request.Url.ToString()));
+                   return Convert.ToBase64String(hash);
+               }
+            }
+        }
+    }
+}
+```
