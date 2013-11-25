@@ -5,6 +5,7 @@ using System.Globalization;
 using System.Linq;
 using System.Threading;
 using Nancy.Bootstrapper;
+using Nancy.LightningCache.CacheKey;
 using Nancy.LightningCache.CacheStore;
 using Nancy.LightningCache.Projection;
 using Nancy.Routing;
@@ -20,6 +21,7 @@ namespace Nancy.LightningCache
 
         private static string[] _varyParams = new string[0];
         private static ICacheStore _cacheStore;
+        private static ICacheKeyGenerator _cacheKeyGenerator;
 
         private static bool _enabled;
 
@@ -42,19 +44,18 @@ namespace Nancy.LightningCache
         /// <param name="nancyBootstrapper"></param>
         /// <param name="routeResolver"></param>
         /// <param name="pipelines"></param>
-        /// <param name="varyParams"></param>
-        public static void Enable(INancyBootstrapper nancyBootstrapper, IRouteResolver routeResolver, IPipelines pipelines, IEnumerable<string> varyParams)
+        /// <param name="cacheKeyGenerator"></param>
+        public static void Enable(INancyBootstrapper nancyBootstrapper, IRouteResolver routeResolver, IPipelines pipelines, ICacheKeyGenerator cacheKeyGenerator)
         {
             if (_enabled)
                 return;
             _enabled = true;
-            _varyParams = varyParams.Select(key => key.ToLower().Trim()).ToArray();
+            _cacheKeyGenerator = cacheKeyGenerator;
             _cacheStore = new WebCacheStore();
             _nancyBootstrapper = nancyBootstrapper;
             _routeResolver = routeResolver;
             pipelines.BeforeRequest.AddItemToStartOfPipeline(CheckCache);
             pipelines.AfterRequest.AddItemToEndOfPipeline(SetCache);
-
         }
 
 
@@ -64,14 +65,14 @@ namespace Nancy.LightningCache
         /// <param name="nancyBootstrapper"></param>
         /// <param name="routeResolver"></param>
         /// <param name="pipeline"></param>
-        /// <param name="varyParams"></param>
+        /// <param name="cacheKeyGenerator"></param>
         /// <param name="cacheStore"></param>
-        public static void Enable(INancyBootstrapper nancyBootstrapper, IRouteResolver routeResolver, IPipelines pipeline, IEnumerable<string> varyParams, ICacheStore cacheStore)
+        public static void Enable(INancyBootstrapper nancyBootstrapper, IRouteResolver routeResolver, IPipelines pipeline, ICacheKeyGenerator cacheKeyGenerator, ICacheStore cacheStore)
         {
             if (_enabled)
                 return;
             _enabled = true;
-            _varyParams = varyParams.Select(key => key.ToLower().Trim()).ToArray();
+            _cacheKeyGenerator = cacheKeyGenerator;
             _cacheStore = cacheStore;
             _nancyBootstrapper = nancyBootstrapper;
             _routeResolver = routeResolver;
@@ -105,7 +106,7 @@ namespace Nancy.LightningCache
                 if ((context.Request.Query as DynamicDictionary).ContainsKey(NO_REQUEST_CACHE_KEY))
                     return null;
 
-            var key = GetCacheKey(context.Request);
+            var key = _cacheKeyGenerator.Get(context.Request);
 
             if (string.IsNullOrEmpty(key))
                 return null;
@@ -138,7 +139,7 @@ namespace Nancy.LightningCache
             if (context.Response is CachedResponse)
                 return;
 
-            var key = GetCacheKey(context.Request);
+            var key = _cacheKeyGenerator.Get(context.Request);
 
             if (string.IsNullOrEmpty(key))
                 return;
@@ -180,7 +181,7 @@ namespace Nancy.LightningCache
                 if (request == null)
                     return;
 
-                var key = GetCacheKey(request);
+                var key = _cacheKeyGenerator.Get(request);
 
                 if (string.IsNullOrEmpty(key))
                     return;
@@ -208,55 +209,6 @@ namespace Nancy.LightningCache
                     RequestSyncKeys.Remove(key);
                 }
             }
-        }
-
-
-        /// <summary>
-        /// Generates a cache key from the supplied Request
-        /// </summary>
-        /// <param name="request"></param>
-        /// <returns></returns>
-        private static string GetCacheKey(Request request)
-        {
-            if (request == null || request.Url == null)
-                return string.Empty;
-
-            var query = new Dictionary<string, string>();
-
-            if (request.Query is DynamicDictionary)
-            {
-                var dynDict = (request.Query as DynamicDictionary);
-                foreach (var key in dynDict.Keys)
-                {
-                    query[key] = (string)dynDict[key];
-                }
-            }
-
-            if (request.Form is DynamicDictionary)
-            {
-                var dynDict = (request.Form as DynamicDictionary);
-                foreach (var key in dynDict.Keys)
-                {
-                    query[key] = (string)dynDict[key];
-                }
-            }
-
-            var removeParamKeys = query.Where(a => !_varyParams.Contains(a.Key.Replace("?", "").ToLower())).Select(a => a.Key).ToArray();
-            foreach (var removeParamKey in removeParamKeys)
-                query.Remove(removeParamKey);
-
-            var url = new Url
-            {
-                BasePath = request.Url.BasePath,
-                Fragment = request.Url.Fragment,
-                HostName = request.Url.HostName,
-                Path = request.Url.Path,
-                Port = request.Url.Port,
-                Query = (query.Count > 0 ? "?" : string.Empty) + string.Join("&", query.Select(a => string.Join("=", a.Key, a.Value))),
-                Scheme = request.Url.Scheme,
-            };
-
-            return url.ToString();
         }
     }
 }
