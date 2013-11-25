@@ -85,7 +85,7 @@ namespace Asp.Net.Example
 ```
 
 ##Example definining your own cache key generation using ICacheKeyGenerator
-If your application does not have access to "System.Web.Cache" as in running in self hosting mode you can use the DiskCacheStore to enable caching thought LightningCache.
+
 ```c#
 using System;
 using System.Text;
