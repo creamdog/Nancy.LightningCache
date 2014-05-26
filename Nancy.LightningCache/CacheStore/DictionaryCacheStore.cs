@@ -4,7 +4,7 @@ using Nancy.LightningCache.Projection;
 
 namespace Nancy.LightningCache.CacheStore
 {
-    class DictionaryCacheStore : ICacheStore
+    public sealed class DictionaryCacheStore : ICacheStore
     {
         public static ConcurrentDictionary<string, SerializableResponse> Memory { get; private set; }
         public CachedResponse Get(string key)
