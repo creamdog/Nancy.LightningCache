@@ -51,6 +51,7 @@
   <ItemGroup>
     <Compile Include="CacheKey\ICacheKeyGenerator.cs" />
     <Compile Include="CacheKey\DefaultCacheKeyGenerator.cs" />
+    <Compile Include="CacheStore\DictionaryCacheStore.cs" />
     <Compile Include="Extensions\NancyBootstrapperExtensions.cs" />
     <Compile Include="Extensions\NegotiatorExtensions.cs" />
     <Compile Include="Projection\CachedResponse.cs" />
