@@ -10,3 +10,7 @@ Nancy.LightningCache.v11.suo
 
 # mstest test results
 TestResults
+
+# NuGet
+packages/*
+!packages/repositories.config
