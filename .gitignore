@@ -12,4 +12,5 @@ Nancy.LightningCache.v11.suo
 TestResults
 
 # NuGet
-packages
+packages/*
+!packages/repositories.config
