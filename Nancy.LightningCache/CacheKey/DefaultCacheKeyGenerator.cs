@@ -50,7 +50,6 @@ namespace Nancy.LightningCache.CacheKey
             var url = new Url
             {
                 BasePath = request.Url.BasePath,
-                Fragment = request.Url.Fragment,
                 HostName = request.Url.HostName,
                 Path = request.Url.Path,
                 Port = request.Url.Port,
