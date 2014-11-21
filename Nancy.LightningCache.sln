@@ -1,6 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 2013
+VisualStudioVersion = 12.0.21005.1
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nancy.LightningCache", "Nancy.LightningCache\Nancy.LightningCache.csproj", "{FDE0905B-F713-478C-83BC-9872631758FE}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Asp.Net.Example", "Asp.Net.Example\Asp.Net.Example.csproj", "{9B3CABB5-4AD2-4AA0-8B41-E293CCD9563E}"
