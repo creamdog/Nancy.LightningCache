@@ -43,7 +43,7 @@ namespace Nancy.LightningCache.CacheKey
                 }
             }
 
-            var removeParamKeys = query.Where(a => !_varyParams.Contains(a.Key.Replace("?", "").ToLower())).Select(a => a.Key).ToArray();
+            var removeParamKeys = query.Where(a => !_varyParams.Contains(a.Key.Replace("?", ""), StringComparer.OrdinalIgnoreCase)).Select(a => a.Key).ToArray();
             foreach (var removeParamKey in removeParamKeys)
                 query.Remove(removeParamKey);
 

@@ -73,7 +73,7 @@ namespace Nancy.LightningCache.CacheStore
         private static string Hash(string str)
         {
             var hasher = SHA256.Create();
-            var inputBytes = Encoding.ASCII.GetBytes(str);
+            var inputBytes = Encoding.ASCII.GetBytes(str.ToLower());
             var hashBytes = hasher.ComputeHash(inputBytes);
 
             var sb = new StringBuilder();

@@ -19,7 +19,7 @@ namespace Nancy.LightningCache.CacheStore
             if (_cache == null)
                 return null;
 
-            var response = _cache.Get(key) as SerializableResponse;
+            var response = _cache.Get(key.ToLower()) as SerializableResponse;
 
             if (response == null)
                 return null;
@@ -34,7 +34,7 @@ namespace Nancy.LightningCache.CacheStore
             if (_cache == null)
                 return;
 
-            _cache.Remove(key);
+            _cache.Remove(key.ToLower());
         }
 
         public void Set(string key, NancyContext context, DateTime absoluteExpiration)
@@ -44,7 +44,7 @@ namespace Nancy.LightningCache.CacheStore
             if(_cache == null)
                 return;
 
-            _cache[key] = new SerializableResponse(context.Response, absoluteExpiration);
+            _cache[key.ToLower()] = new SerializableResponse(context.Response, absoluteExpiration);
 
         }
         private static readonly object Lock = new object();
